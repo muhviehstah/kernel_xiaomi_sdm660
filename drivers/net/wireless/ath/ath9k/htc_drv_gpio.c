@@ -155,7 +155,7 @@ static void ath_htc_cancel_btcoex_work(struct ath9k_htc_priv *priv)
 	cancel_delayed_work_sync(&priv->duty_cycle_work);
 }
 
-void ath9k_htc_start_btcoex(struct ath9k_htc_priv *priv)
+void ath9k_htc_start_ath_btcoex(struct ath9k_htc_priv *priv)
 {
 	struct ath_hw *ah = priv->ah;
 
@@ -167,7 +167,7 @@ void ath9k_htc_start_btcoex(struct ath9k_htc_priv *priv)
 	}
 }
 
-void ath9k_htc_stop_btcoex(struct ath9k_htc_priv *priv)
+void ath9k_htc_stop_ath_btcoex(struct ath9k_htc_priv *priv)
 {
 	struct ath_hw *ah = priv->ah;
 

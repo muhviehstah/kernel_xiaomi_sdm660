@@ -5582,7 +5582,7 @@ int ath10k_wmi_connect(struct ath10k *ar)
 	/* connect to control service */
 	conn_req.service_id = ATH10K_HTC_SVC_ID_WMI_CONTROL;
 
-	status = ath10k_htc_connect_service(&ar->htc, &conn_req, &conn_resp);
+	status = ath10k_htc_connect_service_ath(&ar->htc, &conn_req, &conn_resp);
 	if (status) {
 		ath10k_warn(ar, "failed to connect to WMI CONTROL service status: %d\n",
 			    status);

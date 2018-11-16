@@ -594,7 +594,7 @@ int ath10k_htc_wait_target(struct ath10k_htc *htc)
 	conn_req.service_id = ATH10K_HTC_SVC_ID_RSVD_CTRL;
 
 	/* connect fake service */
-	status = ath10k_htc_connect_service(htc, &conn_req, &conn_resp);
+	status = ath10k_htc_connect_service_ath(htc, &conn_req, &conn_resp);
 	if (status) {
 		ath10k_err(ar, "could not connect to htc service (%d)\n",
 			   status);
@@ -604,7 +604,7 @@ int ath10k_htc_wait_target(struct ath10k_htc *htc)
 	return 0;
 }
 
-int ath10k_htc_connect_service(struct ath10k_htc *htc,
+int ath10k_htc_connect_service_ath(struct ath10k_htc *htc,
 			       struct ath10k_htc_svc_conn_req *conn_req,
 			       struct ath10k_htc_svc_conn_resp *conn_resp)
 {
@@ -784,7 +784,7 @@ struct sk_buff *ath10k_htc_alloc_skb(struct ath10k *ar, int size)
 	return skb;
 }
 
-int ath10k_htc_start(struct ath10k_htc *htc)
+int ath10k_htc_start_ath(struct ath10k_htc *htc)
 {
 	struct ath10k *ar = htc->ar;
 	struct sk_buff *skb;

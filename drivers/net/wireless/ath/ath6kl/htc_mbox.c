@@ -2233,7 +2233,7 @@ int ath6kl_htc_rxmsg_pending_handler(struct htc_target *target,
 		}
 
 		if (target->htc_flags & HTC_OP_STATE_STOPPING) {
-			ath6kl_warn("host is going to stop blocking receiver for htc_stop\n");
+			ath6kl_warn("host is going to stop blocking receiver for htc_stop_ath\n");
 			ath6kl_hif_rx_control(target->dev, false);
 		}
 	}
@@ -2819,7 +2819,7 @@ static int ath6kl_htc_reset(struct htc_target *target)
 	return 0;
 }
 
-/* htc_stop: stop interrupt reception, and flush all queued buffers */
+/* htc_stop_ath: stop interrupt reception, and flush all queued buffers */
 static void ath6kl_htc_mbox_stop(struct htc_target *target)
 {
 	spin_lock_bh(&target->htc_lock);

@@ -115,7 +115,7 @@ static void ath9k_htc_vif_reconfig(struct ath9k_htc_priv *priv)
 		priv->hw, IEEE80211_IFACE_ITER_RESUME_ALL,
 		ath9k_htc_vif_iter, priv);
 	if (priv->rearm_ani)
-		ath9k_htc_start_ani(priv);
+		ath9k_htc_start_ath_ani(priv);
 
 	if (priv->reconfig_beacon) {
 		ath9k_htc_ps_wakeup(priv);
@@ -195,7 +195,7 @@ void ath9k_htc_reset(struct ath9k_htc_priv *priv)
 	mutex_lock(&priv->mutex);
 	ath9k_htc_ps_wakeup(priv);
 
-	ath9k_htc_stop_ani(priv);
+	ath9k_htc_stop_ath_ani(priv);
 	ieee80211_stop_queues(priv->hw);
 
 	del_timer_sync(&priv->tx.cleanup_timer);
@@ -226,7 +226,7 @@ void ath9k_htc_reset(struct ath9k_htc_priv *priv)
 	WMI_CMD_BUF(WMI_SET_MODE_CMDID, &htc_mode);
 
 	WMI_CMD(WMI_ENABLE_INTR_CMDID);
-	htc_start(priv->htc);
+	htc_start_ath(priv->htc);
 	ath9k_htc_vif_reconfig(priv);
 	ieee80211_wake_queues(priv->hw);
 
@@ -259,7 +259,7 @@ static int ath9k_htc_set_channel(struct ath9k_htc_priv *priv,
 
 	ath9k_htc_ps_wakeup(priv);
 
-	ath9k_htc_stop_ani(priv);
+	ath9k_htc_stop_ath_ani(priv);
 	del_timer_sync(&priv->tx.cleanup_timer);
 	ath9k_htc_tx_drain(priv);
 
@@ -305,7 +305,7 @@ static int ath9k_htc_set_channel(struct ath9k_htc_priv *priv,
 	if (ret)
 		goto err;
 
-	htc_start(priv->htc);
+	htc_start_ath(priv->htc);
 
 	if (!test_bit(ATH_OP_SCANNING, &common->op_flags) &&
 	    !(hw->conf.flags & IEEE80211_CONF_OFFCHANNEL))
@@ -746,7 +746,7 @@ static int ath9k_htc_tx_aggr_oper(struct ath9k_htc_priv *priv,
 /* ANI */
 /*******/
 
-void ath9k_htc_start_ani(struct ath9k_htc_priv *priv)
+void ath9k_htc_start_ath_ani(struct ath9k_htc_priv *priv)
 {
 	struct ath_common *common = ath9k_hw_common(priv->ah);
 	unsigned long timestamp = jiffies_to_msecs(jiffies);
@@ -761,7 +761,7 @@ void ath9k_htc_start_ani(struct ath9k_htc_priv *priv)
 				     msecs_to_jiffies(ATH_ANI_POLLINTERVAL));
 }
 
-void ath9k_htc_stop_ani(struct ath9k_htc_priv *priv)
+void ath9k_htc_stop_ath_ani(struct ath9k_htc_priv *priv)
 {
 	struct ath_common *common = ath9k_hw_common(priv->ah);
 	cancel_delayed_work_sync(&priv->ani_work);
@@ -907,7 +907,7 @@ fail_tx:
 	dev_kfree_skb_any(skb);
 }
 
-static int ath9k_htc_start(struct ieee80211_hw *hw)
+static int ath9k_htc_start_ath(struct ieee80211_hw *hw)
 {
 	struct ath9k_htc_priv *priv = hw->priv;
 	struct ath_hw *ah = priv->ah;
@@ -958,7 +958,7 @@ static int ath9k_htc_start(struct ieee80211_hw *hw)
 			"Failed to update capability in target\n");
 
 	clear_bit(ATH_OP_INVALID, &common->op_flags);
-	htc_start(priv->htc);
+	htc_start_ath(priv->htc);
 
 	spin_lock_bh(&priv->tx.tx_lock);
 	priv->tx.flags &= ~ATH9K_HTC_OP_TX_QUEUES_STOP;
@@ -969,14 +969,14 @@ static int ath9k_htc_start(struct ieee80211_hw *hw)
 	mod_timer(&priv->tx.cleanup_timer,
 		  jiffies + msecs_to_jiffies(ATH9K_HTC_TX_CLEANUP_INTERVAL));
 
-	ath9k_htc_start_btcoex(priv);
+	ath9k_htc_start_ath_btcoex(priv);
 
 	mutex_unlock(&priv->mutex);
 
 	return ret;
 }
 
-static void ath9k_htc_stop(struct ieee80211_hw *hw)
+static void ath9k_htc_stop_ath(struct ieee80211_hw *hw)
 {
 	struct ath9k_htc_priv *priv = hw->priv;
 	struct ath_hw *ah = priv->ah;
@@ -1013,11 +1013,11 @@ static void ath9k_htc_stop(struct ieee80211_hw *hw)
 #ifdef CONFIG_MAC80211_LEDS
 	cancel_work_sync(&priv->led_work);
 #endif
-	ath9k_htc_stop_ani(priv);
+	ath9k_htc_stop_ath_ani(priv);
 
 	mutex_lock(&priv->mutex);
 
-	ath9k_htc_stop_btcoex(priv);
+	ath9k_htc_stop_ath_btcoex(priv);
 
 	/* Remove a monitor interface if it's present. */
 	if (priv->ah->is_monitoring)
@@ -1104,7 +1104,7 @@ static int ath9k_htc_add_interface(struct ieee80211_hw *hw,
 	if ((priv->ah->opmode == NL80211_IFTYPE_AP) &&
 	    !test_bit(ATH_OP_ANI_RUN, &common->op_flags)) {
 		ath9k_hw_set_tsfadjust(priv->ah, true);
-		ath9k_htc_start_ani(priv);
+		ath9k_htc_start_ath_ani(priv);
 	}
 
 	ath_dbg(common, CONFIG, "Attach a VIF of type: %d at idx: %d\n",
@@ -1166,7 +1166,7 @@ static void ath9k_htc_remove_interface(struct ieee80211_hw *hw,
 			priv->hw, IEEE80211_IFACE_ITER_RESUME_ALL,
 			ath9k_htc_vif_iter, priv);
 		if (!priv->rearm_ani)
-			ath9k_htc_stop_ani(priv);
+			ath9k_htc_stop_ath_ani(priv);
 	}
 
 	ath_dbg(common, CONFIG, "Detach Interface at idx: %d\n", avp->index);
@@ -1534,9 +1534,9 @@ static void ath9k_htc_bss_info_changed(struct ieee80211_hw *hw,
 		if (priv->ah->opmode == NL80211_IFTYPE_STATION) {
 			ath9k_htc_choose_set_bssid(priv);
 			if (bss_conf->assoc && (priv->num_sta_assoc_vif == 1))
-				ath9k_htc_start_ani(priv);
+				ath9k_htc_start_ath_ani(priv);
 			else if (priv->num_sta_assoc_vif == 0)
-				ath9k_htc_stop_ani(priv);
+				ath9k_htc_stop_ath_ani(priv);
 		}
 	}
 
@@ -1713,7 +1713,7 @@ static void ath9k_htc_sw_scan_start(struct ieee80211_hw *hw,
 	set_bit(ATH_OP_SCANNING, &common->op_flags);
 	spin_unlock_bh(&priv->beacon_lock);
 	cancel_work_sync(&priv->ps_work);
-	ath9k_htc_stop_ani(priv);
+	ath9k_htc_stop_ath_ani(priv);
 	mutex_unlock(&priv->mutex);
 }
 
@@ -1867,8 +1867,8 @@ static void ath9k_htc_channel_switch_beacon(struct ieee80211_hw *hw,
 
 struct ieee80211_ops ath9k_htc_ops = {
 	.tx                 = ath9k_htc_tx,
-	.start              = ath9k_htc_start,
-	.stop               = ath9k_htc_stop,
+	.start              = ath9k_htc_start_ath,
+	.stop               = ath9k_htc_stop_ath,
 	.add_interface      = ath9k_htc_add_interface,
 	.remove_interface   = ath9k_htc_remove_interface,
 	.config             = ath9k_htc_config,

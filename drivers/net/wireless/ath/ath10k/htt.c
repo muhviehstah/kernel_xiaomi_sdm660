@@ -154,7 +154,7 @@ int ath10k_htt_connect(struct ath10k_htt *htt)
 	/* connect to control service */
 	conn_req.service_id = ATH10K_HTC_SVC_ID_HTT_DATA_MSG;
 
-	status = ath10k_htc_connect_service(&htt->ar->htc, &conn_req,
+	status = ath10k_htc_connect_service_ath(&htt->ar->htc, &conn_req,
 					    &conn_resp);
 
 	if (status)

@@ -1737,7 +1737,7 @@ static int __ath6kl_init_hw_start(struct ath6kl *ar)
 	ath6kl_htc_credit_setup(ar->htc_target, &ar->credit_state_info);
 
 	/* start HTC */
-	ret = ath6kl_htc_start(ar->htc_target);
+	ret = ath6kl_htc_start_ath(ar->htc_target);
 	if (ret) {
 		/* FIXME: call this */
 		ath6kl_cookie_cleanup(ar);
@@ -1754,7 +1754,7 @@ static int __ath6kl_init_hw_start(struct ath6kl *ar)
 		ath6kl_err("wmi is not ready or wait was interrupted: %ld\n",
 			   timeleft);
 		ret = -EIO;
-		goto err_htc_stop;
+		goto err_htc_stop_ath;
 	}
 
 	ath6kl_dbg(ATH6KL_DBG_BOOT, "firmware booted\n");
@@ -1774,7 +1774,7 @@ static int __ath6kl_init_hw_start(struct ath6kl *ar)
 		ath6kl_err("abi version mismatch: host(0x%x), target(0x%x)\n",
 			   ATH6KL_ABI_VERSION, ar->version.abi_ver);
 		ret = -EIO;
-		goto err_htc_stop;
+		goto err_htc_stop_ath;
 	}
 
 	ath6kl_dbg(ATH6KL_DBG_TRC, "%s: wmi is ready\n", __func__);
@@ -1787,13 +1787,13 @@ static int __ath6kl_init_hw_start(struct ath6kl *ar)
 	for (i = 0; i < ar->vif_max; i++) {
 		ret = ath6kl_target_config_wlan_params(ar, i);
 		if (ret)
-			goto err_htc_stop;
+			goto err_htc_stop_ath;
 	}
 
 	return 0;
 
-err_htc_stop:
-	ath6kl_htc_stop(ar->htc_target);
+err_htc_stop_ath:
+	ath6kl_htc_stop_ath(ar->htc_target);
 err_cleanup_scatter:
 	ath6kl_hif_cleanup_scatter(ar);
 err_power_off:
@@ -1819,7 +1819,7 @@ static int __ath6kl_init_hw_stop(struct ath6kl *ar)
 
 	ath6kl_dbg(ATH6KL_DBG_BOOT, "hw stop\n");
 
-	ath6kl_htc_stop(ar->htc_target);
+	ath6kl_htc_stop_ath(ar->htc_target);
 
 	ath6kl_hif_stop(ar);
 
@@ -1906,7 +1906,7 @@ void ath6kl_stop_txrx(struct ath6kl *ar)
 	clear_bit(WMI_ENABLED, &ar->flag);
 	if (ar->htc_target) {
 		ath6kl_dbg(ATH6KL_DBG_TRC, "%s: shut down htc\n", __func__);
-		ath6kl_htc_stop(ar->htc_target);
+		ath6kl_htc_stop_ath(ar->htc_target);
 	}
 
 	/*

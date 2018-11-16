@@ -349,8 +349,8 @@ struct ath10k_htc {
 
 int ath10k_htc_init(struct ath10k *ar);
 int ath10k_htc_wait_target(struct ath10k_htc *htc);
-int ath10k_htc_start(struct ath10k_htc *htc);
-int ath10k_htc_connect_service(struct ath10k_htc *htc,
+int ath10k_htc_start_ath(struct ath10k_htc *htc);
+int ath10k_htc_connect_service_ath(struct ath10k_htc *htc,
 			       struct ath10k_htc_svc_conn_req  *conn_req,
 			       struct ath10k_htc_svc_conn_resp *conn_resp);
 int ath10k_htc_send(struct ath10k_htc *htc, enum ath10k_htc_ep_id eid,

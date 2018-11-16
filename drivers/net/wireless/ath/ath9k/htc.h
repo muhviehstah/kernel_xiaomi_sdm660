@@ -426,16 +426,16 @@ struct ath_btcoex {
 
 #ifdef CONFIG_ATH9K_BTCOEX_SUPPORT
 void ath9k_htc_init_btcoex(struct ath9k_htc_priv *priv, char *product);
-void ath9k_htc_start_btcoex(struct ath9k_htc_priv *priv);
-void ath9k_htc_stop_btcoex(struct ath9k_htc_priv *priv);
+void ath9k_htc_start_ath_btcoex(struct ath9k_htc_priv *priv);
+void ath9k_htc_stop_ath_btcoex(struct ath9k_htc_priv *priv);
 #else
 static inline void ath9k_htc_init_btcoex(struct ath9k_htc_priv *priv, char *product)
 {
 }
-static inline void ath9k_htc_start_btcoex(struct ath9k_htc_priv *priv)
+static inline void ath9k_htc_start_ath_btcoex(struct ath9k_htc_priv *priv)
 {
 }
-static inline void ath9k_htc_stop_btcoex(struct ath9k_htc_priv *priv)
+static inline void ath9k_htc_stop_ath_btcoex(struct ath9k_htc_priv *priv)
 {
 }
 #endif /* CONFIG_ATH9K_BTCOEX_SUPPORT */
@@ -564,8 +564,8 @@ void ath9k_htc_beaconep(void *drv_priv, struct sk_buff *skb,
 int ath9k_htc_update_cap_target(struct ath9k_htc_priv *priv,
 				u8 enable_coex);
 void ath9k_htc_ani_work(struct work_struct *work);
-void ath9k_htc_start_ani(struct ath9k_htc_priv *priv);
-void ath9k_htc_stop_ani(struct ath9k_htc_priv *priv);
+void ath9k_htc_start_ath_ani(struct ath9k_htc_priv *priv);
+void ath9k_htc_stop_ath_ani(struct ath9k_htc_priv *priv);
 
 int ath9k_tx_init(struct ath9k_htc_priv *priv);
 int ath9k_htc_tx_start(struct ath9k_htc_priv *priv,

@@ -30,7 +30,7 @@ static inline int ath6kl_htc_wait_target(struct htc_target *target)
 	return target->dev->ar->htc_ops->wait_target(target);
 }
 
-static inline int ath6kl_htc_start(struct htc_target *target)
+static inline int ath6kl_htc_start_ath(struct htc_target *target)
 {
 	return target->dev->ar->htc_ops->start(target);
 }
@@ -48,7 +48,7 @@ static inline int ath6kl_htc_tx(struct htc_target *target,
 	return target->dev->ar->htc_ops->tx(target, packet);
 }
 
-static inline void ath6kl_htc_stop(struct htc_target *target)
+static inline void ath6kl_htc_stop_ath(struct htc_target *target)
 {
 	return target->dev->ar->htc_ops->stop(target);
 }
