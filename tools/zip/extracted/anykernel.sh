@@ -4,10 +4,11 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
+kernel.string=4.4.163-InsigniuX-LA.UM.7.2.r1-05200-x8.1-Muhmod
 do.devicecheck=1
-do.modules=0
+do.modules=1
 do.cleanup=1
-do.cleanuponabort=1
+do.cleanuponabort=0
 device.name1=whyred
 device.name2=wayne
 device.name3=
@@ -16,7 +17,7 @@ device.name5=
 '; } # end properties
 
 # shell variables
-block=/dev/block/bootdevice/by-name/boot
+block=/dev/block/bootdevice/by-name/boot;
 is_slot_device=0;
 ramdisk_compression=auto;
 
@@ -28,14 +29,14 @@ ramdisk_compression=auto;
 
 ## AnyKernel file attributes
 # set permissions/ownership for included ramdisk files
-chmod -R 750 $ramdisk/*;
-chmod -R 755 $ramdisk/sbin;
-chown -R root:root $ramdisk/*;
+
+#chmod -R 750 $ramdisk/*;
+#chmod -R 755 $ramdisk/sbin;
+#chown -R root:root $ramdisk/*;
 
 
 ## AnyKernel install
 dump_boot;
-
 write_boot;
 
 ## end install
