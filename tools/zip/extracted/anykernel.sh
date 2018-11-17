@@ -4,7 +4,6 @@
 ## AnyKernel setup
 # begin properties
 properties() { '
-kernel.string=4.4.163-InsigniuX-LA.UM.7.2.r1-05200-x8.1-Muhmod
 do.devicecheck=1
 do.modules=1
 do.cleanup=1
