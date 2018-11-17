@@ -93,7 +93,7 @@ ui_print " ";
 ui_print "                InsigniuX-x8.1";
 ui_print "         LA.UM.7.2.r1-05200-sdm660.0";
 ui_print "                Linux- 4.4.163";
-umount_all;
+unmount_all;
 mount -o ro -t auto /system;
 mount -o ro -t auto /vendor 2>/dev/null;
 mount /data 2>/dev/null;
